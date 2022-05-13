@@ -2,13 +2,13 @@
   <h1>Tasks Vuejs</h1>
   <input
     type="text"
-    v-model="text"
+    v-model="state.text"
     @keyup.enter="addTask"
   />
   <button @click="addTask">+</button>
   
   <ul>
-    <li v-for="(task, index) in tasks" :key="index" class="tasks">
+    <li v-for="(task, index) in state.tasks" :key="index" class="tasks">
       <div>
         <span :class="task.isDone ? 'isDone' : '' " @dblclick="doneTask(task)">{{ task.text }}</span>
         <input type="checkbox" :checked="task.isDone" @click="doneCheckedTask(task)" />
@@ -19,37 +19,44 @@
 </template>
 
 <script>
+import { reactive } from '@vue/reactivity';
+const state = reactive({
+  tasks: [
+    {text: "Terminar curso vuejs 3", isDone: true},
+    {text: "Estudar Laravel", isDone: false},
+    {text: "Ler o livro do Zeno Rocha", isDone: false},
+  ],
+
+  text: '',
+})
+
 export default {
-  data: () => ({
-    tasks: [
-      {text: "Terminar curso vuejs 3", isDone: true},
-      {text: "Estudar Laravel", isDone: false},
-      {text: "Ler o livro do Zeno Rocha", isDone: false},
-    ],
-    text: ''
-  }),
-  methods: {
-    addTask() {
-      this.tasks.push({
-        text: this.text,
+  setup() {
+    return {
+      state,
+
+      addTask() {
+      state.tasks.push({
+        text: state.text,
         isDone: false
       });
 
-      this.text = "";
+      state.text = "";
     },
 
-    doneTask(task) {
-      task.isDone = !task.isDone;
-    },
+      doneTask(task) {
+        task.isDone = !task.isDone;
+      },
 
-    doneCheckedTask(task) {
-      task.isDone = !task.isDone;
-    },
+      doneCheckedTask(task) {
+        task.isDone = !task.isDone;
+      },
 
-    removeTask(task) {
-      this.tasks = this.tasks.filter(el => el.text !== task.text);
+      removeTask(task) {
+        state.tasks = state.tasks.filter(el => el.text !== task.text);
+      }
     }
-  },
+  }
 }
 </script>
 
