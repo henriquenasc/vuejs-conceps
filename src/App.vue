@@ -1,26 +1,68 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <h1>Tasks Vuejs</h1>
+  <input
+    type="text"
+    v-model="text"
+    @keyup.enter="addTask"
+  />
+  <button @click="addTask">+</button>
+  
+  <ul>
+    <li v-for="(task, index) in tasks" :key="index" class="tasks">
+      <div>
+        <span :class="task.isDone ? 'isDone' : '' " @dblclick="doneTask(task)">{{ task.text }}</span>
+        <input type="checkbox" :checked="task.isDone" @click="doneCheckedTask(task)" />
+        <span @click="removeTask(task)">remover</span>
+      </div>
+    </li>
+  </ul>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+  data: () => ({
+    tasks: [
+      {text: "Terminar curso vuejs 3", isDone: true},
+      {text: "Estudar Laravel", isDone: false},
+      {text: "Ler o livro do Zeno Rocha", isDone: false},
+    ],
+    text: ''
+  }),
+  methods: {
+    addTask() {
+      this.tasks.push({
+        text: this.text,
+        isDone: false
+      });
+
+      this.text = "";
+    },
+
+    doneTask(task) {
+      task.isDone = !task.isDone;
+    },
+
+    doneCheckedTask(task) {
+      task.isDone = !task.isDone;
+    },
+
+    removeTask(task) {
+      this.tasks = this.tasks.filter(el => el.text !== task.text);
+    }
+  },
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style scoped>
+  .tasks {
+    cursor: pointer;
+    font-family: sans-serif;
+    font-weight: 450;
+    list-style: none;
+    color: green;
+  }
+  .isDone {
+    color: red;
+    text-decoration: line-through;
+  }
 </style>
