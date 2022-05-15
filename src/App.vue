@@ -20,6 +20,7 @@
 
 <script>
 import { reactive } from '@vue/reactivity';
+
 const state = reactive({
   tasks: [
     {text: "Terminar curso vuejs 3", isDone: true},
@@ -30,31 +31,38 @@ const state = reactive({
   text: '',
 })
 
+function addTask() {
+  if(state.text != '') {
+    state.tasks.push({
+      text: state.text,
+      isDone: false
+    });
+    state.text = "";
+  } else {
+    alert("campo vazio!");
+  }
+}
+
+function doneTask(task) {
+  task.isDone = !task.isDone;
+}
+
+function doneCheckedTask(task) {
+  task.isDone = !task.isDone;
+}
+
+function removeTask(task) {
+  state.tasks = state.tasks.filter(el => el.text !== task.text);
+}
+
 export default {
   setup() {
     return {
       state,
-
-      addTask() {
-      state.tasks.push({
-        text: state.text,
-        isDone: false
-      });
-
-      state.text = "";
-    },
-
-      doneTask(task) {
-        task.isDone = !task.isDone;
-      },
-
-      doneCheckedTask(task) {
-        task.isDone = !task.isDone;
-      },
-
-      removeTask(task) {
-        state.tasks = state.tasks.filter(el => el.text !== task.text);
-      }
+      addTask,
+      doneTask,
+      doneCheckedTask,
+      removeTask    
     }
   }
 }
