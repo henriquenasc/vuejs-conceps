@@ -39,7 +39,7 @@ function addTask() {
     });
     state.text = "";
   } else {
-    alert("campo vazio!");
+    alert("Campo vazio!");
   }
 }
 
